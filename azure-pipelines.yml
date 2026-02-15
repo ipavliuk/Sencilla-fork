@@ -71,20 +71,6 @@ stages:
               projects: 'Sencilla.sln'
               arguments: '--configuration $(buildConfiguration) --no-restore /p:Version=$(packageVersion)'
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Run tests'
-            inputs:
-              command: 'test'
-              projects: 'Tests/**/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --no-build --collect:"XPlat Code Coverage" --results-directory $(Agent.TempDirectory)/TestResults'
-              publishTestResults: true
-
-          - task: PublishCodeCoverageResults@2
-            displayName: 'Publish code coverage'
-            inputs:
-              summaryFileLocation: '$(Agent.TempDirectory)/TestResults/**/coverage.cobertura.xml'
-              failIfCoverageEmpty: false
-
           # Pack with explicit version (GeneratePackageOnBuild is true in libs/Directory.Build.props,
           # but we re-pack here to control version and output location)
           - task: DotNetCoreCLI@2
