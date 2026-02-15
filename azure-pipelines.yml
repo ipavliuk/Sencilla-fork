@@ -104,19 +104,11 @@ stages:
           - task: NuGetAuthenticate@1
             displayName: 'Authenticate to Azure Artifacts'
 
-          - task: DotNetCoreCLI@2
+          - task: NuGetCommand@2
             displayName: 'Push packages to Azure Artifacts'
             inputs:
               command: 'push'
               packagesToPush: '$(Pipeline.Workspace)/nuget-packages/*.nupkg'
               nuGetFeedType: 'internal'
               publishVstsFeed: '$(artifactsFeed)'
-
-          - task: DotNetCoreCLI@2
-            displayName: 'Push symbol packages to Azure Artifacts'
-            inputs:
-              command: 'push'
-              packagesToPush: '$(Pipeline.Workspace)/nuget-packages/*.snupkg'
-              nuGetFeedType: 'internal'
-              publishVstsFeed: '$(artifactsFeed)'
-            continueOnError: true  # snupkg push may fail if feed doesn't support symbols
+              allowPackageConflicts: true
