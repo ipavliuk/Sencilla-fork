@@ -25,7 +25,7 @@ variables:
   # Base version from libs/Directory.Build.props
   baseVersion: '10.0.0'
   # Azure Artifacts feed name - create this feed in Azure DevOps before first run
-  artifactsFeed: 'sencilla'
+  artifactsFeed: 'Photoboost/sencilla'
 
   # Version suffix for pre-release packages on non-main branches
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
