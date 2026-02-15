@@ -71,20 +71,13 @@ stages:
               projects: 'Sencilla.sln'
               arguments: '--configuration $(buildConfiguration) --no-restore /p:Version=$(packageVersion)'
 
-          # Pack with explicit version (GeneratePackageOnBuild is true in libs/Directory.Build.props,
-          # but we re-pack here to control version and output location)
-          - task: DotNetCoreCLI@2
-            displayName: 'Pack NuGet packages'
-            inputs:
-              command: 'pack'
-              packagesToPack: 'libs/**/*.csproj'
-              configuration: '$(buildConfiguration)'
-              nobuild: true
-              includesymbols: true
-              includesource: false
-              versioningScheme: 'byEnvVar'
-              versionEnvVar: 'packageVersion'
-              outputDir: '$(Build.ArtifactStagingDirectory)/packages'
+          # Collect .nupkg and .snupkg files produced by build (GeneratePackageOnBuild=true)
+          - powershell: |
+              New-Item -ItemType Directory -Force -Path "$(Build.ArtifactStagingDirectory)\packages"
+              Get-ChildItem -Path libs -Recurse -Include *.nupkg,*.snupkg | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)\packages"
+              Write-Host "Packages found:"
+              Get-ChildItem "$(Build.ArtifactStagingDirectory)\packages"
+            displayName: 'Collect NuGet packages'
 
           - task: PublishPipelineArtifact@1
             displayName: 'Publish NuGet artifacts'
