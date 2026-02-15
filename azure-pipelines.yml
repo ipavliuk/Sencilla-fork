@@ -45,7 +45,7 @@ stages:
       - job: BuildAndTest
         displayName: 'Build, Test & Pack'
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-latest'
         steps:
           - checkout: self
             fetchDepth: 0
@@ -115,7 +115,7 @@ stages:
       - job: PublishPackages
         displayName: 'Push NuGet packages'
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-latest'
         steps:
           - download: current
             artifact: 'nuget-packages'
