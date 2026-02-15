@@ -5,6 +5,7 @@ trigger:
   branches:
     include:
       - main
+      - master
       - develop
       - release/*
   paths:
@@ -28,7 +29,7 @@ variables:
   artifactsFeed: 'Photoboost/sencilla'
 
   # Version suffix for pre-release packages on non-main branches
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/master')) }}:
     versionSuffix: ''
     packageVersion: '$(baseVersion)'
   ${{ elseif startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
